@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
         Networkism(this).init(lifecycleScope)
 
         // or
-        Networkism.observer(application, lifecycleScope).observe(this, {
+        Networkism.observer(application, lifecycleScope).observe(this, Observer {
             it.counter
             if (it.isConnected) {
                 txt_log.text = "uhuy"

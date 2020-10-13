@@ -39,7 +39,7 @@ The Networkism use coroutine flow and cast to liveData with coroutineContext for
 
 #### Simple usage
 ```kotlin
-Networkism.observer(application, lifecycleScope).observe(this, { result
+Networkism.observer(application, lifecycleScope).observe(this, Observer { result
     if (result.isConnected) {
         // network available
     } else {
