@@ -24,7 +24,7 @@ implementation 'androidx.lifecycle:lifecycle-runtime-ktx:latest-version'
 
 ### Download
 ```groovy
-// uploading...
+implementation 'com.utsman.networkism:networkism:1.0.0'
 ```
 
 ### API support
