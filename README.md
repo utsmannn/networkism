@@ -7,6 +7,7 @@
 </p>
 
 <p align="center">
+  <a href="https://bintray.com/kucingapes/utsman/com.utsman.netwokism/_latestVersion"><img alt="bintray" src="https://api.bintray.com/packages/kucingapes/utsman/com.utsman.netwokism/images/download.svg"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"></a>
   <a href="https://github.com/utsmannn/networkism/pulls"><img alt="Pull request" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"></a>
   <a href="https://developer.android.com/kotlin"><img alt="Fcm docs" src="https://img.shields.io/badge/Kotlin-Coroutine-orange?logo=kotlin&style=flat"></a>
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
 ```
 
 #### Use dependencies injection
-Create single instance of Networkism is **recommended**, see sample of manual dependencies
+Create single instance of Networkism is **recommended**, see sample of manual dependencies ([sample](https://github.com/utsmannn/networkism/tree/master/sample-di))
 
 ---
 
