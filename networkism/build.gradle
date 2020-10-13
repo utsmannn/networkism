@@ -20,17 +20,17 @@ apply plugin: 'kotlin-android-extensions'
 
 ext {
     bintrayRepo = "utsman"
-    bintrayName = "com.utsman.netwokism"
+    bintrayName = "com.utsman.networkism"
 
-    libraryName = 'netwokism'
-    artifact = 'netwokism'
+    libraryName = 'networkism'
+    artifact = 'networkism'
 
-    publishedGroupId = 'com.utsman.netwokism'
+    publishedGroupId = 'com.utsman.networkism'
     libraryVersion = '1.0.0'
 
     libraryDescription = 'Lightweight library for network observer changes'
-    siteUrl = 'https://github.com/utsmannn/netwokism'
-    gitUrl = 'https://github.com/utsmannn/netwokism.git'
+    siteUrl = 'https://github.com/utsmannn/networkism'
+    gitUrl = 'https://github.com/utsmannn/networkism.git'
     developerId = 'utsman'
     developerName = 'Muhammad Utsman'
     developerEmail = 'utsmannn@gmail.com'
