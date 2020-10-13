@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
 ```
 
 #### Use dependencies injection
-Create single instance of Networkism is **recommended**, see sample of manual dependencies ([sample](https://github.com/utsmannn/networkism/tree/master/sample-di))
+Create single instance of Networkism is **recommended**, see sample of manual dependencies injection ([sample](https://github.com/utsmannn/networkism/tree/master/sample-di))
 
 ---
 
