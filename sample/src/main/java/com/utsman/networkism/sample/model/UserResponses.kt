@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Muhammad Utsman
+ * Copyright (c) 2021 Muhammad Utsman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package com.utsman.networkism.sample.di
+package com.utsman.networkism.sample.model
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.asLiveData
-import com.utsman.networkism.Networkism
-import kotlinx.coroutines.CoroutineScope
-
-class NetworkismContainer(application: Application) {
-
-    init {
-        Log.i("SAMPLE DI", "Creating container..")
-    }
-
-    val networkism = Networkism.flow(application)
-    fun observer(coroutineScope: CoroutineScope) = networkism
-        .asLiveData(coroutineScope.coroutineContext)
-}
+data class UserResponses(
+    val data: List<User>
+)

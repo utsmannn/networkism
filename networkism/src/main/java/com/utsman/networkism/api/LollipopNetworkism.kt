@@ -16,7 +16,6 @@
 
 package com.utsman.networkism.api
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -30,15 +29,15 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class LollipopNetwork(application: Application) {
-    private val manager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+class LollipopNetworkism(context: Context) : NetworkismApi {
+    private val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     private val requestBuilder = NetworkRequest.Builder()
         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
         .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
         .build()
 
-    fun listen() = callbackFlow<NetworkismResult> {
+    override fun listen() = callbackFlow<NetworkismResult> {
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)

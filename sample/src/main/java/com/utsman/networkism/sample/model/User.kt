@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Muhammad Utsman
+ * Copyright (c) 2021 Muhammad Utsman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.utsman.networkism.sample.di
+package com.utsman.networkism.sample.model
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.google.gson.annotations.SerializedName
 
-@HiltAndroidApp
-class MainApplication : Application()
+data class User(
+    val id: Int,
+    val email: String,
+    @SerializedName("last_name")
+    val lastName: String,
+    @SerializedName("first_name")
+    val firstName: String
+)

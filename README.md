@@ -40,13 +40,17 @@ The Networkism use coroutine flow and cast to liveData with coroutineContext for
 
 #### Simple usage
 ```kotlin
-Networkism.observer(application, lifecycleScope).observe(this, Observer { result
-    if (result.isConnected) {
-        // network available
-    } else {
-        // network lost
-    }
-})
+val api = Networkism.provideNetworkismApi(this)
+val networkism = Networkism.instance(api)
+networkism
+    .asLiveData(lifecycleScope)
+    .observe(this, Observer { networkResult ->
+        if (networkResult.isConnected) {
+            // connected
+        } else {
+            // disconnected
+        }
+    })
 ```
 
 #### Bind to listener
@@ -59,7 +63,9 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
         setContentView(R.layout.activity_main)
 
         // init lifecycle scope from 'androidx.lifecycle:lifecycle-runtime-ktx'
-        Networkism(this).init(lifecycleScope)
+        val api = Networkism.provideNetworkismApi(this)
+        val networkism = Networkism.instance(api)
+        networkism.setNetworkismListener(lifecycleScope, this)
     }
 
     override fun connectivityAvailable(counter: NetworkismResult.Counter?) {
@@ -74,8 +80,20 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
 }
 ```
 
+#### Integrated with retrofit (coroutine adapter)
+```kotlin
+fun getUsers(page: Int = 1, networkism: Networkism) = viewModelScope.launch {
+    networkism.checkConnection()
+        .map { retrofit.getUser(page) }
+        .map { it.data.map { d -> d.lastName } }
+        .collect {
+            _users.postValue(it)
+        }
+}
+```
+
 #### Use dependencies injection
-Create single instance of Networkism is **recommended**, see sample of manual dependencies injection ([sample](https://github.com/utsmannn/networkism/tree/master/sample-di))
+See sample of dependencies injection with Dagger Hilt ([sample](sample-di/src/main/java/com/utsman/networkism/sample/di))
 
 ---
 

@@ -16,7 +16,6 @@
 
 package com.utsman.networkism.api
 
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,9 +27,9 @@ import com.utsman.networkism.logi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
-class PreLollipopNetwork(private val application: Application) {
+class PreLollipopNetworkism(private val context: Context) : NetworkismApi {
 
-    fun listen() = callbackFlow<NetworkismResult> {
+    override fun listen() = callbackFlow<NetworkismResult> {
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         val broadcast = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -49,7 +48,7 @@ class PreLollipopNetwork(private val application: Application) {
             }
         }
 
-        application.registerReceiver(broadcast, filter)
-        awaitClose { application.unregisterReceiver(broadcast) }
+        context.registerReceiver(broadcast, filter)
+        awaitClose { context.unregisterReceiver(broadcast) }
     }
 }

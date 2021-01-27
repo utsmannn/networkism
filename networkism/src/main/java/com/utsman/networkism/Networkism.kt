@@ -16,68 +16,60 @@
 
 package com.utsman.networkism
 
-import android.app.Application
+import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.asLiveData
-import com.utsman.networkism.api.LollipopNetwork
-import com.utsman.networkism.api.PreLollipopNetwork
+import com.utsman.networkism.api.LollipopNetworkism
+import com.utsman.networkism.api.NetworkismApi
+import com.utsman.networkism.api.PreLollipopNetworkism
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
-class Networkism(private val listener: NetworkismListener) {
+class Networkism(private val networkismApi: NetworkismApi) {
 
     companion object {
-        fun flow(application: Application) = when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> LollipopNetwork(application).listen()
-            else -> PreLollipopNetwork(application).listen()
+        fun provideNetworkismApi(context: Context): NetworkismApi = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> LollipopNetworkism(context)
+            else -> PreLollipopNetworkism(context)
         }
 
-        fun observer(application: Application, coroutineScope: CoroutineScope) = flow(application)
-            .asLiveData(coroutineScope.coroutineContext)
+        private var instance: Networkism? = null
+        fun instance(networkismApi: NetworkismApi): Networkism {
+            if (instance == null) {
+                instance = Networkism(networkismApi)
+            }
+            return instance!!
+        }
+    }
 
+    fun listenConnection() = networkismApi.listen().map { it.isConnected }
 
-        fun initLifecycle(flow: Flow<NetworkismResult>, coroutineScope: CoroutineScope, listener: NetworkismListener) = run {
-            val liveData = flow.asLiveData(coroutineScope.coroutineContext)
-            val activity = listener as AppCompatActivity?
-            if (activity != null) {
-                liveData.observe(activity, {
+    fun checkConnection() = flow { emit(listenConnection().first()) }
+
+    fun asLiveData(coroutineScope: CoroutineScope) = networkismApi.listen()
+        .asLiveData(coroutineScope.coroutineContext)
+
+    fun setNetworkismListener(
+        coroutineScope: CoroutineScope,
+        listener: NetworkismListener
+    ) = run {
+        val liveData = networkismApi.listen().asLiveData(coroutineScope.coroutineContext)
+        when (listener) {
+            is AppCompatActivity -> {
+                liveData.observe(listener, {
                     if (it.isConnected) {
                         listener.connectivityAvailable(it.counter)
                     } else {
                         listener.connectivityLost()
                     }
                 })
-            } else {
-                val fragment = listener as FragmentActivity?
-                if (fragment != null) {
-                    liveData.observe(fragment, {
-                        if (it.isConnected) {
-                            listener.connectivityAvailable(it.counter)
-                        } else {
-                            listener.connectivityLost()
-                        }
-                    })
-                }
             }
-        }
-    }
-
-    fun init(coroutineScope: CoroutineScope) = run {
-        val activity = listener as AppCompatActivity?
-        if (activity != null) {
-            observer(activity.application, coroutineScope).observe(activity, {
-                if (it.isConnected) {
-                    listener.connectivityAvailable(it.counter)
-                } else {
-                    listener.connectivityLost()
-                }
-            })
-        } else {
-            val fragment = listener as FragmentActivity?
-            if (fragment != null) {
-                observer(fragment.application, coroutineScope).observe(fragment, {
+            is FragmentActivity -> {
+                liveData.observe(listener, {
                     if (it.isConnected) {
                         listener.connectivityAvailable(it.counter)
                     } else {

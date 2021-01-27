@@ -18,35 +18,49 @@ package com.utsman.networkism.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.utsman.networkism.Networkism
 import com.utsman.networkism.NetworkismListener
 import com.utsman.networkism.NetworkismResult
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 class MainActivity : AppCompatActivity(), NetworkismListener {
+    private val viewModel: UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Networkism(this).init(lifecycleScope)
+        val api = Networkism.provideNetworkismApi(this)
+        val networkism = Networkism.instance(api)
+        networkism
+            .asLiveData(lifecycleScope)
+            .observe(this, Observer { networkResult ->
+                if (networkResult.isConnected) {
+                    // connected
+                } else {
+                    // disconnected
+                }
+            })
 
-        // or
-        Networkism.observer(application, lifecycleScope).observe(this, Observer {
-            it.counter
-            if (it.isConnected) {
-                txt_log.text = "uhuy"
-            } else {
-                txt_log.text = "error"
-            }
+        viewModel.users.observe(this, {
+            txt_log.text = "$it"
         })
+
+        btn_test.setOnClickListener {
+            txt_log.text = "..."
+            viewModel.getUsers(2, api)
+        }
     }
 
     override fun connectivityAvailable(counter: NetworkismResult.Counter?) {
-        txt_log.text = "connect"
+        txt_status.text = "connect"
     }
 
     override fun connectivityLost() {
-        txt_log.text = "disconnect"
+        txt_status.text = "disconnect"
     }
 }

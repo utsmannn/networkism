@@ -22,15 +22,19 @@ import androidx.lifecycle.lifecycleScope
 import com.utsman.networkism.Networkism
 import com.utsman.networkism.NetworkismListener
 import com.utsman.networkism.NetworkismResult
+import com.utsman.networkism.api.NetworkismApi
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NetworkismListener {
+    @Inject lateinit var networkism: Networkism
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val networkismContainer = (application as MainApplication).networkismContainer
-        Networkism.initLifecycle(networkismContainer.networkism, lifecycleScope, this)
+        networkism.setNetworkismListener(lifecycleScope, this)
     }
 
     override fun connectivityAvailable(counter: NetworkismResult.Counter?) {

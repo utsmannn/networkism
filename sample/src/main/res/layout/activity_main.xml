@@ -32,4 +32,24 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/txt_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="Hello World!"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:layout_margin="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/txt_log"
+        app:layout_constraintStart_toStartOf="@+id/txt_log"
+        app:layout_constraintTop_toBottomOf="@+id/txt_log" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
