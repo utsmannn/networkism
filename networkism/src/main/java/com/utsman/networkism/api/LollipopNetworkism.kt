@@ -45,11 +45,15 @@ class LollipopNetworkism(context: Context) : NetworkismApi {
                 val capabilities = manager.getNetworkCapabilities(network)
                 val down = capabilities?.linkDownstreamBandwidthKbps ?: 0
                 val up = capabilities?.linkUpstreamBandwidthKbps ?: 0
+                val signal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    capabilities?.signalStrength
+                } else {
+                    null
+                }
                 logi("Connectivity available")
-                logi("down is -> $down -> up is -> $up")
 
                 offer(NetworkismResult.simple {
-                    this.counter = NetworkismResult.Counter(down, up)
+                    this.counter = NetworkismResult.Counter(down, up, signal)
                     this.isConnected = true
                     this.reason = ConstantValue.CONNECTIVITY_AVAILABLE
                 })

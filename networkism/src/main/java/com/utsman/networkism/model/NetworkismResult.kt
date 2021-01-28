@@ -23,7 +23,8 @@ data class NetworkismResult(
 ) {
     data class Counter(
         var downKbps: Int = 0,
-        var upKbps: Int = 0
+        var upKbps: Int = 0,
+        var signal: Int? = 0
     )
 
     companion object {

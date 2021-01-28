@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-internal fun OkHttpClient.request(url: String): Flow<NetworkismResult> = channelFlow {
+internal fun OkHttpClient.request(url: String, networkismResult: NetworkismResult): Flow<NetworkismResult> = channelFlow {
     val job = GlobalScope.launch {
         val request = Request.Builder()
             .url(url)
@@ -41,9 +41,11 @@ internal fun OkHttpClient.request(url: String): Flow<NetworkismResult> = channel
             if (response?.isSuccessful == true) {
                 isConnected = true
                 reason = "Url connected on $url"
+                counter = networkismResult.counter
             } else {
                 isConnected = false
                 reason = "Connecting url failure"
+                counter = networkismResult.counter
             }
         }
 

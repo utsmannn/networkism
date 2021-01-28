@@ -19,10 +19,9 @@ package com.utsman.networkism.mapper
 import com.utsman.networkism.model.NetworkismResult
 import com.utsman.networkism.model.UrlConnectionBuilder
 import com.utsman.networkism.utils.loge
+import com.utsman.networkism.utils.logi
 import com.utsman.networkism.utils.request
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 internal object Mapper {
     fun listenOn(
@@ -31,15 +30,9 @@ internal object Mapper {
     ): Flow<NetworkismResult> {
 
         return if (builder.okHttpClient != null && builder.url != null) {
-            builder.okHttpClient!!.request(builder.url!!)
-                .flatMapConcat { a ->
-                    listenFlow.map {
-                        NetworkismResult.simple {
-                            this.isConnected = a.isConnected
-                            this.reason = a.reason
-                        }
-                    }
-                }
+            listenFlow.flatMapMerge {
+                builder.okHttpClient!!.request(builder.url!!, it)
+            }
         } else {
             loge("Connection Builder NOT WORK!, Okhttp client or url must be fill")
             listenFlow
