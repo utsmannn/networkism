@@ -24,6 +24,9 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
+import java.net.HttpRetryException
+import java.net.UnknownHostException
 
 internal fun OkHttpClient.request(url: String, networkismResult: NetworkismResult): Flow<NetworkismResult> = channelFlow {
     val job = GlobalScope.launch {
@@ -32,8 +35,13 @@ internal fun OkHttpClient.request(url: String, networkismResult: NetworkismResul
             .build()
 
         val response = try {
-            newCall(request).execute()
+            if (networkismResult.isConnected) {
+                newCall(request).execute()
+            } else {
+                null
+            }
         } catch (e: Throwable) {
+            networkismResult.reason = "Connecting url failure"
             null
         }
 
@@ -44,7 +52,7 @@ internal fun OkHttpClient.request(url: String, networkismResult: NetworkismResul
                 counter = networkismResult.counter
             } else {
                 isConnected = false
-                reason = "Connecting url failure"
+                reason = networkismResult.reason
                 counter = networkismResult.counter
             }
         }

@@ -25,7 +25,7 @@ ext {
     artifact = 'networkism'
 
     publishedGroupId = 'com.utsman.networkism'
-    libraryVersion = '2.2.0'
+    libraryVersion = '2.3.0'
 
     libraryDescription = 'Lightweight library for network observer changes'
     siteUrl = 'https://github.com/utsmannn/networkism'
@@ -45,7 +45,7 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 4
+        versionCode 5
         versionName libraryVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
