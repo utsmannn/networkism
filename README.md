@@ -1,9 +1,11 @@
-<h1 align="center">
-  Networkism
-</h1>
+<p align="center">
+  In The Name of Network<br>
+  present<br>
+  <h1 align="center">Networkism</h1>
+</p>
 
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1599140782241-144735f5949a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=80"/>
+  <img src="https://images.unsplash.com/photo-1598346762291-aee88549193f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80"/>
 </p>
 
 <p align="center">
