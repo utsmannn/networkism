@@ -26,6 +26,7 @@ import com.utsman.networkism.sample.retrofit.Instance
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 
 class UserViewModel : ViewModel() {
 
@@ -34,14 +35,16 @@ class UserViewModel : ViewModel() {
     val users: LiveData<List<String>> = _users
 
     @FlowPreview
-    fun getUsers(page: Int = 1, networkismApi: NetworkismApi) = viewModelScope.launch {
-        val networkism = Networkism.instance(networkismApi)
-
+    fun getUsers(page: Int = 1, networkism: Networkism) = viewModelScope.launch {
         networkism.checkConnection()
+            .filter {
+                it.isConnected
+            }
             .map { network.getUser(page) }
             .map { it.data.map { d -> d.lastName } }
             .collect {
                 _users.postValue(it)
             }
+
     }
 }

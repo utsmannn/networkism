@@ -24,12 +24,14 @@ import androidx.lifecycle.asLiveData
 import com.utsman.networkism.api.LollipopNetworkism
 import com.utsman.networkism.api.NetworkismApi
 import com.utsman.networkism.api.PreLollipopNetworkism
+import com.utsman.networkism.listener.NetworkismListener
+import com.utsman.networkism.mapper.Mapper
+import com.utsman.networkism.model.UrlConnectionBuilder
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
 class Networkism(private val networkismApi: NetworkismApi) {
+
+    private var urlConnectionBuilder: UrlConnectionBuilder? = null
 
     companion object {
         fun provideNetworkismApi(context: Context): NetworkismApi = when {
@@ -46,18 +48,29 @@ class Networkism(private val networkismApi: NetworkismApi) {
         }
     }
 
-    fun listenConnection() = networkismApi.listen().map { it.isConnected }
+    fun withConnectionBuilder(connectionBuilder: UrlConnectionBuilder.() -> Unit): Networkism {
+        val builder = UrlConnectionBuilder()
+        connectionBuilder.invoke(builder)
+        urlConnectionBuilder = builder
+        return this
+    }
 
-    fun checkConnection() = flow { emit(listenConnection().first()) }
+    fun checkConnection() = run {
+        if (urlConnectionBuilder != null) {
+            Mapper.listenOn(urlConnectionBuilder!!, networkismApi.listen())
+        } else {
+            networkismApi.listen()
+        }
+    }
 
-    fun asLiveData(coroutineScope: CoroutineScope) = networkismApi.listen()
-        .asLiveData(coroutineScope.coroutineContext)
+    fun checkConnectionAsLiveData(coroutineScope: CoroutineScope) =
+        checkConnection().asLiveData(coroutineScope.coroutineContext)
 
     fun setNetworkismListener(
         coroutineScope: CoroutineScope,
         listener: NetworkismListener
     ) = run {
-        val liveData = networkismApi.listen().asLiveData(coroutineScope.coroutineContext)
+        val liveData = checkConnection().asLiveData(coroutineScope.coroutineContext)
         when (listener) {
             is AppCompatActivity -> {
                 liveData.observe(listener, {

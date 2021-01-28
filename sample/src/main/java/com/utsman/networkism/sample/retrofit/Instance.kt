@@ -16,6 +16,7 @@
 
 package com.utsman.networkism.sample.retrofit
 
+import com.utsman.networkism.sample.ConstantValue
 import com.utsman.networkism.sample.model.UserResponses
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,7 +32,7 @@ interface Instance {
 
     companion object {
         fun builder(): Instance = Retrofit.Builder()
-            .baseUrl("https://reqres.in")
+            .baseUrl(ConstantValue.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(Instance::class.java)

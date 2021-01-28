@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package com.utsman.networkism.api
+package com.utsman.networkism.model
 
-import com.utsman.networkism.model.NetworkismResult
-import kotlinx.coroutines.flow.Flow
+import okhttp3.OkHttpClient
 
-interface NetworkismApi {
-    fun listen(): Flow<NetworkismResult>
+data class UrlConnectionBuilder(
+    var okHttpClient: OkHttpClient? = null,
+    var url: String? = null
+) {
+    companion object {
+        fun build(connectionBuilder: UrlConnectionBuilder.() -> Unit) = UrlConnectionBuilder().apply(connectionBuilder)
+    }
 }

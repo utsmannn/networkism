@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Muhammad Utsman
+ * Copyright (c) 2021 Muhammad Utsman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package com.utsman.networkism
+package com.utsman.networkism.model
 
-interface NetworkismListener {
-    fun connectivityAvailable(counter: NetworkismResult.Counter?)
-    fun connectivityLost()
+data class NetworkismResult(
+    var counter: Counter? = null,
+    var isConnected: Boolean = false,
+    var reason: String = ""
+) {
+    data class Counter(
+        var downKbps: Int = 0,
+        var upKbps: Int = 0
+    )
+
+    companion object {
+        fun simple(result: NetworkismResult.() -> Unit) = NetworkismResult().apply(result)
+    }
 }

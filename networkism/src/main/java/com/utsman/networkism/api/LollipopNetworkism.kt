@@ -23,8 +23,9 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.utsman.networkism.NetworkismResult
-import com.utsman.networkism.logi
+import com.utsman.networkism.utils.ConstantValue
+import com.utsman.networkism.model.NetworkismResult
+import com.utsman.networkism.utils.logi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -50,6 +51,7 @@ class LollipopNetworkism(context: Context) : NetworkismApi {
                 offer(NetworkismResult.simple {
                     this.counter = NetworkismResult.Counter(down, up)
                     this.isConnected = true
+                    this.reason = ConstantValue.CONNECTIVITY_AVAILABLE
                 })
             }
 
@@ -59,6 +61,7 @@ class LollipopNetworkism(context: Context) : NetworkismApi {
                 offer(NetworkismResult.simple {
                     this.counter = null
                     this.isConnected = false
+                    this.reason = ConstantValue.CONNECTIVITY_UNAVAILABLE
                 })
             }
 
@@ -72,6 +75,7 @@ class LollipopNetworkism(context: Context) : NetworkismApi {
                 offer(NetworkismResult.simple {
                     this.counter = NetworkismResult.Counter(down, up)
                     this.isConnected = false
+                    this.reason = ConstantValue.CONNECTIVITY_LOST
                 })
             }
         }

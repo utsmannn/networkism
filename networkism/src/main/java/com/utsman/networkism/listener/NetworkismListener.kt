@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Muhammad Utsman
+ * Copyright (c) 2020 Muhammad Utsman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.utsman.networkism.api
+package com.utsman.networkism.listener
 
 import com.utsman.networkism.model.NetworkismResult
-import kotlinx.coroutines.flow.Flow
 
-interface NetworkismApi {
-    fun listen(): Flow<NetworkismResult>
+interface NetworkismListener {
+    fun connectivityAvailable(counter: NetworkismResult.Counter?)
+    fun connectivityLost()
 }

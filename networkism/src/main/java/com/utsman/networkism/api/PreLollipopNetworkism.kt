@@ -22,8 +22,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.utsman.networkism.NetworkismResult
-import com.utsman.networkism.logi
+import com.utsman.networkism.utils.ConstantValue
+import com.utsman.networkism.model.NetworkismResult
+import com.utsman.networkism.utils.logi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -40,9 +41,16 @@ class PreLollipopNetworkism(private val context: Context) : NetworkismApi {
                     if (isAvailable) logi("Connectivity available")
                     else logi("Connectivity lost")
 
+                    val reason = if (isAvailable) {
+                        ConstantValue.CONNECTIVITY_AVAILABLE
+                    } else {
+                        ConstantValue.CONNECTIVITY_UNAVAILABLE
+                    }
+
                     offer(NetworkismResult.simple {
                         this.counter = null
                         this.isConnected = isAvailable
+                        this.reason = reason
                     })
                 }
             }

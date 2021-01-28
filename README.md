@@ -31,6 +31,7 @@ implementation 'com.utsman.networkism:networkism:1.1.0'
 | result param | lollipop or newer | pre lollipop | value | desc |
 | --- | --- | --- | --- | --- |
 | `NetworkismResult.isConnected` | yes | yes | `boolean` | the value of network available |
+| `NetworkismResult.reason` | yes | yes | `string` | the reason of connectivity |
 | `NetworkismResult.Counter` | yes | no | `object` | model of Kbps counter |
 | `NetworkismResult.Counter.downKbps` | yes | no | `Int` | current down stream bandwidth |
 | `NetworkismResult.Counter.upKbps` | yes | no | `Int` | current up stream bandwidth |
@@ -42,8 +43,7 @@ The Networkism use coroutine flow and cast to liveData with coroutineContext for
 ```kotlin
 val api = Networkism.provideNetworkismApi(this)
 val networkism = Networkism.instance(api)
-networkism
-    .asLiveData(lifecycleScope)
+networkism.checkConnectionAsLiveData(lifecycleScope)
     .observe(this, Observer { networkResult ->
         if (networkResult.isConnected) {
             // connected
@@ -90,6 +90,16 @@ fun getUsers(page: Int = 1, networkism: Networkism) = viewModelScope.launch {
             _users.postValue(it)
         }
 }
+```
+
+#### Connection Builder (optional)
+Checking connection of url
+```kotlin
+val networkism = Networkism.instance(api)
+networkism.withConnectionBuilder {
+      okHttpClient = OkHttpClient()
+      url = "https://www.google.com"
+  }
 ```
 
 #### Use dependencies injection

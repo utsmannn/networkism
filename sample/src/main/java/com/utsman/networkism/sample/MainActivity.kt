@@ -18,14 +18,16 @@ package com.utsman.networkism.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.utsman.networkism.Networkism
-import com.utsman.networkism.NetworkismListener
-import com.utsman.networkism.NetworkismResult
+import com.utsman.networkism.listener.NetworkismListener
+import com.utsman.networkism.model.NetworkismResult
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.FlowPreview
+import okhttp3.OkHttpClient
 
 @FlowPreview
 class MainActivity : AppCompatActivity(), NetworkismListener {
@@ -36,14 +38,15 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
         setContentView(R.layout.activity_main)
         val api = Networkism.provideNetworkismApi(this)
         val networkism = Networkism.instance(api)
-        networkism
-            .asLiveData(lifecycleScope)
+            .withConnectionBuilder {
+                okHttpClient = OkHttpClient()
+                url = ConstantValue.BASE_URL
+            }
+
+        networkism.checkConnectionAsLiveData(lifecycleScope)
             .observe(this, Observer { networkResult ->
-                if (networkResult.isConnected) {
-                    // connected
-                } else {
-                    // disconnected
-                }
+                Log.i("uhuy", "onCreate: $networkResult")
+                txt_status.text = networkResult.reason
             })
 
         viewModel.users.observe(this, {
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
 
         btn_test.setOnClickListener {
             txt_log.text = "..."
-            viewModel.getUsers(2, api)
+            viewModel.getUsers(2, networkism)
         }
     }
 

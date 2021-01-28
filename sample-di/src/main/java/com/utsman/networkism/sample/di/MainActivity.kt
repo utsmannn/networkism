@@ -20,9 +20,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.utsman.networkism.Networkism
-import com.utsman.networkism.NetworkismListener
-import com.utsman.networkism.NetworkismResult
-import com.utsman.networkism.api.NetworkismApi
+import com.utsman.networkism.listener.NetworkismListener
+import com.utsman.networkism.model.NetworkismResult
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject

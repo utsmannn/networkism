@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Muhammad Utsman
+ * Copyright (c) 2021 Muhammad Utsman
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.utsman.networkism
+package com.utsman.networkism.utils
 
-import android.util.Log
-
-internal fun logi(msg: String) = Log.i("Networkism", msg)
+internal object ConstantValue {
+    const val CONNECTIVITY_AVAILABLE = "Connectivity available"
+    const val CONNECTIVITY_UNAVAILABLE = "Connectivity unavailable"
+    const val CONNECTIVITY_LOST = "Connectivity lost"
+}
