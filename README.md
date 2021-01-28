@@ -24,7 +24,7 @@ implementation 'androidx.lifecycle:lifecycle-runtime-ktx:latest-version'
 
 ### Download
 ```groovy
-implementation 'com.utsman.networkism:networkism:2.3.0'
+implementation 'com.utsman.networkism:networkism:2.4.0'
 ```
 
 ### API support
@@ -41,8 +41,7 @@ The Networkism use coroutine flow and cast to liveData with coroutineContext for
 
 #### Simple usage
 ```kotlin
-val api = Networkism.provideNetworkismApi(this)
-val networkism = Networkism.instance(api)
+val networkism = Networkism.instance(context)
 networkism.checkConnectionAsLiveData(lifecycleScope)
     .observe(this, Observer { networkResult ->
         if (networkResult.isConnected) {
@@ -63,8 +62,7 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
         setContentView(R.layout.activity_main)
 
         // init lifecycle scope from 'androidx.lifecycle:lifecycle-runtime-ktx'
-        val api = Networkism.provideNetworkismApi(this)
-        val networkism = Networkism.instance(api)
+        val networkism = Networkism.instance(this)
         networkism.setNetworkismListener(lifecycleScope, this)
     }
 
@@ -95,7 +93,7 @@ fun getUsers(page: Int = 1, networkism: Networkism) = viewModelScope.launch {
 #### Connection Builder (optional)
 Checking connection of url
 ```kotlin
-val networkism = Networkism.instance(api)
+val networkism = Networkism.instance(context)
 networkism.withConnectionBuilder {
       okHttpClient = OkHttpClient()
       url = "https://www.google.com"

@@ -36,8 +36,7 @@ class MainActivity : AppCompatActivity(), NetworkismListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val api = Networkism.provideNetworkismApi(this)
-        val networkism = Networkism.instance(api)
+        val networkism = Networkism.instance(this)
             .withConnectionBuilder {
                 okHttpClient = OkHttpClient()
                 url = ConstantValue.BASE_URL

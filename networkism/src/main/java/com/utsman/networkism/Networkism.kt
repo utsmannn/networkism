@@ -34,13 +34,14 @@ class Networkism(private val networkismApi: NetworkismApi) {
     private var urlConnectionBuilder: UrlConnectionBuilder? = null
 
     companion object {
-        fun provideNetworkismApi(context: Context): NetworkismApi = when {
+        private fun provideNetworkismApi(context: Context): NetworkismApi = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> LollipopNetworkism(context)
             else -> PreLollipopNetworkism(context)
         }
 
         private var instance: Networkism? = null
-        fun instance(networkismApi: NetworkismApi): Networkism {
+        fun instance(context: Context): Networkism {
+            val networkismApi = provideNetworkismApi(context)
             if (instance == null) {
                 instance = Networkism(networkismApi)
             }

@@ -32,13 +32,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApi(@ApplicationContext context: Context): NetworkismApi {
-        return Networkism.provideNetworkismApi(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideNetworkism(networkismApi: NetworkismApi): Networkism {
-        return Networkism.instance(networkismApi)
+    fun provideNetworkism(@ApplicationContext context: Context): Networkism {
+        return Networkism.instance(context)
     }
 }
